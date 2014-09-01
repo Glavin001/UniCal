@@ -78,12 +78,12 @@ $(document).ready(function() {
             var cData = JSON.parse($el.attr('data-course'));
             addCourse(cData);
         });
-    }
+    };
 
     // Init
     displayCourses([]);
     displaySelectedCourses([]);
-    
+
     // Main
     getUniApi(function(uniApi) {
 
@@ -91,7 +91,7 @@ $(document).ready(function() {
         var baseApiUrl = uniApi.protocol + "://" + uniApi.hostname + ":" +uniApi.port + "/api/v1/";
 
         var findCourses = function(query, callback) {
-          var data = "where="+JSON.stringify(query.where)+"&limit="+query.limit;
+          var data = "conditions="+JSON.stringify(query.conditions)+"&options="+JSON.stringify(query.options);
           $.get(baseApiUrl + "courses", data)
           .done(function(data) {
             console.log(data);
@@ -100,22 +100,18 @@ $(document).ready(function() {
         };
 
         var searchCourses = function() {
-            //var where = {"Subj_code": $subjectCode.val(), "Crse_numb": $courseNumb.val() };
-            /*
-            var where = [
-                "`Subj_code` LIKE '"+$subjectCode.val()+"%'",
-                "`Crse_numb` LIKE '"+$courseNumb.val()+"%'"
-                ];
-            */
-            var where = [
-                "`Subj_code`='"+$subjectCode.val()+"' AND `Crse_numb`='"+$courseNumb.val()+"'"
-                ];
+            var conditions = {
+                "Subj_code": $subjectCode.val(),
+                "Crse_numb": $courseNumb.val()
+              };
             var limit = 10;
-
-            findCourses({"where": where, "limit": limit }, function(courses) {
+            var options = {
+              limit: limit
+            };
+            findCourses({"conditions": conditions, "options": options }, function(courses) {
                 console.log(courses);
                 displayCourses(courses);
-            })
+            });
         };
 
         var submitCourses = function(callback) {
@@ -129,7 +125,7 @@ $(document).ready(function() {
             submitCourses(function(data) {
                 if (data && data.url) {
                     var calendarURL = window.location.origin + data.url;
-                    
+
                     console.log(calendarURL);
                     console.log(data);
 
@@ -145,7 +141,7 @@ $(document).ready(function() {
         $searchCoursesBtn.click(searchCourses);
         // Trigger virtual click
         $searchCoursesBtn.click();
-        
+
 
     });
 

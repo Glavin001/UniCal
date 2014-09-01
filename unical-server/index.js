@@ -44,7 +44,7 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
         "protocol": nconf.get('uniapi:protocol'),
         "hostname": nconf.get('uniapi:hostname'),
         "port": nconf.get('uniapi:port')
-      })
+      });
     });
 
     var saveCalendar = function(calendarId, courses, collection, callback) {
@@ -61,7 +61,7 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
     // Create Calendar
     app.post('/api/calendar', function(req, res) {
         console.log(req.body);
-        
+
         var courses = JSON.parse(req.body.courses);
 
 
@@ -190,7 +190,7 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
                         course = temp;
                     }
                 } catch (e) {
-                    // 
+                    //
                 }
                 return cb(null, course);
             });

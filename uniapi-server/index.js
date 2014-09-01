@@ -1,7 +1,9 @@
 // Dependencies
 var nconf = require('nconf');
 var feathers = require('feathers');
-var Sequelize = require('sequelize');
+// Get Mongoose
+var mongoose = require('mongoose');
+// Cross-Origin Requests
 var cors = require('cors');
 
 // Configuration
@@ -14,7 +16,7 @@ var cors = require('cors');
 nconf.argv()
    .env()
    .file('custom', __dirname+'/config.json')
-   .file({ file: __dirname+'/default.config.json' })
+   .file({ file: __dirname+'/default.config.json' });
 
 if (nconf.get('help')) {
     console.log("HELP");
@@ -23,14 +25,15 @@ if (nconf.get('help')) {
 }
 
 // Setup connection to Database
-var sequelize = new Sequelize(nconf.get('database:name'), nconf.get('database:username'), nconf.get('database:password'), {
-    dialect: nconf.get('database:dialect'),
-    port: nconf.get('database:port')
-})
+var options = {
+  user: nconf.get('database:username'),
+  pass: nconf.get('database:password')
+};
+mongoose.connect('mongodb://'+nconf.get('database:host')+":"+nconf.get('database:port')+"/"+nconf.get('database:name'), options);
 
 // Services
 var facultySearchService = require('./services/faculty_search');
-var coursesService = require('./services/course')(sequelize);
+var coursesService = require('./services/course')(mongoose);
 
 // CORS
 var app = feathers();

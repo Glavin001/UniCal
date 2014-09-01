@@ -5,10 +5,10 @@
         "cors": true
     },
     "database": {
-        "dialect": "mysql",
+        "host": "localhost",
         "name": "smu",
-        "port": 3306,
-        "username": "root",
+        "port": 27017,
+        "username": null,
         "password": null
     }
 }
