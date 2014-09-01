@@ -1,0 +1,16 @@
+{
+  "name": "smmapp",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "jquery": "~2.1.0",
+    "Font-Awesome": "~4.0.3",
+    "ionicons": "~1.4.1",
+    "bootstrap": "~3.1.1",
+    "animate.css": "~3.1.0",
+    "momentjs": "~2.5.1",
+    "underscore": "~1.6.0",
+    "lodash": "~2.4.1"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,14 @@
+{
+    "server": {
+        "port": 8080,
+        "publicDir": null,
+        "cors": true
+    },
+    "database": {
+        "dialect": "mysql",
+        "name": "smu",
+        "port": 3306,
+        "username": "root",
+        "password": null
+    }
+}

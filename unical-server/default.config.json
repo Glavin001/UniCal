@@ -1,0 +1,21 @@
+{
+    "server":
+    {
+      "secret": "default",
+      "port": 8081,
+      "publicDir": "../unical-app/"
+    },
+    "database": {
+      "hostname": "127.0.0.1",
+      "port": 27017,
+      "name": "smu-ical",
+      "username": "root",
+      "password": null,
+      "collection": "calendars"
+    },
+    "uniapi": {
+      "protocol": "http",
+      "hostname": "127.0.0.1",
+      "port": 8080
+    }
+}

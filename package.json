@@ -1,0 +1,65 @@
+{
+  "name": "smmapp",
+  "version": "0.3.0",
+  "description": "Saint Mary's Mobile App",
+  "author": "Glavin Wiechert <glavin.wiechert@gmail.com>",
+  "main": "api-server/",
+  "contributors": [
+    {
+      "name": "Glavin Wiechert",
+      "email": "glavin.wiechert@gmail.com",
+      "url": "https://github.com/Glavin001"
+    },
+    {
+      "name": "Andrew Masiye",
+      "email": "amasiye313@gmail.com",
+      "url": "https://github.com/amasiye"
+    },
+    {
+      "name": "Javian Trotman",
+      "email": "jtp3sk@gmail.com",
+      "url": "https://github.com/TwistedFaith"
+    },
+    {
+      "name": "Daniel Lockhart",
+      "email": "d.f.locked@gmail.com",
+      "url": "https://github.com/Danlock"
+    }
+  ],
+  "website": {
+    "url": "http://glavin001.github.io/SMMApp2/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Glavin001/SMMApp2.git"
+  },
+  "private": true,
+  "analyze": false,
+  "dependencies": {
+    "icalendar": "0.6.3",
+    "request": "^2.33.0",
+    "cheerio": ">=0.13.0",
+    "feathers": "^0.3.2",
+    "sequelize": "^1.7.0",
+    "feathers-orm-service": "^0.2.0",
+    "nconf": "^0.6.9",
+    "mysql": "^2.1.1",
+    "async": "^0.6.2",
+    "lodash": "^2.4.1",
+    "crypto": "0.0.3",
+    "express": "^3.5.1",
+    "mongodb": "^1.3.23",
+    "cors": "^2.2.0"
+  },
+  "devDependencies": {
+    "bower": "1.2.8",
+    "commander": "^2.1.0",
+    "csv": "^0.3.7",
+    "Faker": "^0.7.0"
+  },
+  "engines": {
+    "node": ">=0.10.0",
+    "npm": ">=1.4.x"
+  },
+  "scripts": {}
+}
