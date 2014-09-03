@@ -103,17 +103,17 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
 
     });
 
-    var timeFromStr = function(str) {
-        // Ex: "4:00 pm"
-        //console.log('timeFromStr: ', str);
-        var n = parseInt(str);
-        var hours = parseInt(n/100);
-        var minutes = n - hours*100;
-        return {
-            "hours": hours,
-            "minutes": minutes
-        };
-    };
+    // var timeFromStr = function(str) {
+    //     // Ex: "1245"
+    //     //console.log('timeFromStr: ', str);
+    //     var n = parseInt(str);
+    //     var hours = parseInt(n/100);
+    //     var minutes = n - hours*100;
+    //     return {
+    //         "hours": hours,
+    //         "minutes": minutes
+    //     };
+    // };
 
     var jsonToEvent = function(json) {
         //console.log('jsonToEvent: ', json);
@@ -125,10 +125,10 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
         vevent.setDescription(location);
         // Calculate date and event length
         var startDate = new Date(json.Start_date);
-        var startTime = timeFromStr(json.Begin_time);
+        var startTime = json.Begin_time;
         startDate.setHours(startTime.hours, startTime.minutes);
 
-        var endTime = timeFromStr(json.End_time);
+        var endTime = json.End_time;
         var endDate = new Date(json.Start_date);
         endDate.setHours(endTime.hours, endTime.minutes);
         // console.log(startDate, endDate);
@@ -156,8 +156,9 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
         if (json.Sun_day) {
             days.push("SU");
         }
-        console.log(days);
+        // console.log(days);
         vevent.addProperty('RRULE', { FREQ: 'WEEKLY', BYDAY: days.join(','), UNTIL: new Date(json.End_date) });
+        vevent.addProperty('LOCATION', json.Bldg_code +" "+json.Room_code);
         return vevent;
     };
 
@@ -171,8 +172,12 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
         // Add events to calendar
         for (var i=0, len=courses.length; i<len; i++)
         {
-            var vevent = jsonToEvent(courses[i]);
-            calendar.addComponent(vevent);
+            var course = courses[i];
+            if (course.Begin_time && course.End_time)
+            {
+              var vevent = jsonToEvent(course);
+              calendar.addComponent(vevent);
+            }
         }
         return callback(calendar);
     };
@@ -181,7 +186,7 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
 
         async.map(courses, function(course, cb) {
             var baseurl = nconf.get('uniapi:protocol')+"://"+nconf.get('uniapi:hostname')+":"+nconf.get('uniapi:port');
-            var url = baseurl + "/api/v1/courses/"+course.id;
+            var url = baseurl + "/api/v1/courses/"+course._id;
             request(url, function(error, response, body) {
                 console.log(error, body);
                 try {

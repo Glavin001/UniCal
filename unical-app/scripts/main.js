@@ -44,7 +44,7 @@ $(document).ready(function() {
 
     var addCourse = function(course) {
         var idx = _.findIndex(selectedCourses, function(curr) {
-            return curr.id === course.id;
+            return curr._id === course._id;
         });
         if (idx == -1) {
             selectedCourses.push(course);
@@ -54,9 +54,9 @@ $(document).ready(function() {
     };
 
     var removeCourse = function(course) {
-        var id = course.id;
+        var id = course._id;
         var idx = _.findIndex(selectedCourses, function(curr) {
-            return curr.id === id;
+            return curr._id === id;
         });
         console.log(idx);
         if (idx > -1) {

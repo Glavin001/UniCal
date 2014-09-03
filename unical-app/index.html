@@ -57,7 +57,19 @@
                   to
                   <strong>{{formatDate End_date "MMMM Do, YYYY"}}</strong>
                   at
-                  <strong>{{Begin_time}} to {{End_time}}</strong>
+                  <strong>
+                    {{#if Begin_time}}
+                      {{Begin_time.hours}}:{{numberWithDigits Begin_time.minutes 2}} 
+                    {{else}}
+                        N/A
+                    {{/if}}
+                    to 
+                    {{#if End_time}}
+                        {{End_time.hours}}:{{numberWithDigits End_time.minutes 2}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                  </strong>
                 </div>
                 <div>
                     {{#if Mon_day}}
@@ -119,7 +131,19 @@
                   to
                   <strong>{{formatDate End_date "MMMM Do, YYYY"}}</strong>
                   at
-                  <strong>{{Begin_time}} to {{End_time}}</strong>
+                  <strong>
+                    {{#if Begin_time}}
+                      {{Begin_time.hours}}:{{numberWithDigits Begin_time.minutes 2}} 
+                    {{else}}
+                        N/A
+                    {{/if}}
+                    to 
+                    {{#if End_time}}
+                        {{End_time.hours}}:{{numberWithDigits End_time.minutes 2}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                  </strong>
                 </div>
                 <div>
                     {{#if Mon_day}}
@@ -206,6 +230,13 @@
           else {
             return obj;
           }
+        });
+
+        Handlebars.registerHelper('numberWithDigits', function(myNumber, digits) {
+            if (digits != 2) {
+                throw new Error('Only 2 digits is currently supported.');
+            }
+            return ("0" + myNumber).slice(-2);
         });
 
     </script>

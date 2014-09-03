@@ -40,7 +40,7 @@ var timeFromStr = function(str) {
     hours = parseInt(s[0]);
     minutes = parseInt(s[1]);
     // Check if 'pm'
-    if (s[1].indexOf("pm") != -1) {
+    if (s[1].indexOf("pm") != -1 && hours!= 12) {
       hours += 12;
     }
     return {'hours':hours, 'minutes':minutes }
