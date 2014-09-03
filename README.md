@@ -44,10 +44,20 @@ node unical-server/
 ./utils/download_latest_courses.js --output data/latest_courses.json
 ```
 
-### Load Courses from file
+### Load Courses from new JSON file
+
+Use on the output of the latest downloaded course schedules.
 
 ```bash
-node utils/load_courses.js -i data/courses.csv
+node utils/load_courses.js -i data/latest_courses.json
+```
+
+### (Old) Load Courses from file
+
+Used for loading courses from older CSV file from SMU staff.
+
+```bash
+node utils/load_courses_old.js -i data/courses.csv
 ```
 
 ### Create Sandbox

@@ -59,11 +59,11 @@ module.exports = {
         comment: ""
     },
     Begin_time: {
-        type: String,
+        type: Object,
         comment: ""
     },
     End_time: {
-        type: String,
+        type: Object,
         comment: ""
     },
     // Days
