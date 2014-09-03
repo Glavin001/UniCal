@@ -38,6 +38,12 @@ node api-server/
 node unical-server/
 ```
 
+### Download Latest Course Schedules
+
+```bash
+./utils/download_latest_courses.js --output data/latest_courses.json
+```
+
 ### Load Courses from file
 
 ```bash
