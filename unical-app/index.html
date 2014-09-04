@@ -33,6 +33,13 @@
 
     <div class="container">
       <h1>Welcome to the UniCal</h1>
+      
+      <div class="alert alert-info">
+          <em>Spread the word about UniCal!</em>
+          &nbsp;&nbsp;
+          <div class="share-button" style="display: inline-block;"></div>
+          <br/>
+      </div>
 
       <h2>Step 1: Search for your course(s)</h2>
 
@@ -254,6 +261,17 @@
 
     <!-- Custom Scripts -->
     <script src="scripts/main.js"></script>
+    <script src="scripts/share.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var share = new Share(".share-button", {
+                ui: {
+                    flyout: 'bottom center'
+                }
+            });
+            $('.share-button').css({'display':'inline-block'});
+        });
+    </script>
 
   </body>
 </html>
