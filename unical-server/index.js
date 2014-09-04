@@ -121,7 +121,7 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
         var summary = json.Subj_code + " " + json.Crse_numb + " - " + json.Crse_title;
         vevent.setSummary(summary);
 
-        vevent.setDescription(json.faculty);
+        vevent.setDescription(json.Faculty);
         // Calculate date and event length
         var startDate = new Date(json.Start_date);
         var startTime = json.Begin_time;

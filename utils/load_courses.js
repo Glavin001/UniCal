@@ -129,7 +129,7 @@ var normalizeRow = function(row) {
     row.Room_code = ls[2];
 
     // faculty
-    row.faculty = row.instructors;
+    row.Faculty = row.instructors;
     delete row.instructors;
 
     // Return

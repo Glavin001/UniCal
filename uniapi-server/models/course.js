@@ -34,6 +34,9 @@ module.exports = {
         type: String,
         comment: "Level code of course (undergrad (UG), graduate (GR), etc)."
     },
+    Faculty: {
+        type: String
+    },
     Text_narrative: {
         type: String,
         comment: ""
