@@ -120,6 +120,21 @@ $(document).ready(function() {
             });
         };
 
+        var getStats = function(callback) {
+          $.get('/api/stats.json').done(function(stats) {
+            return callback && callback(stats);
+          });
+        };
+
+        // Display stats
+        function displayStats() {
+          getStats(function(stats) {
+            $('.calendars-created-count').text(stats.calendars);
+          });
+        }
+        setInterval(displayStats, 5*1000); // Update Stats every 5 seconds
+        displayStats(); // Init
+        
         $submitBtn.click(function() {
             $('a#calendarURL').text("Please wait...");
             submitCourses(function(data) {
