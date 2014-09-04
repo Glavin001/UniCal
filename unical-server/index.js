@@ -31,6 +31,7 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
     if(err) throw err;
 
     var collection = db.collection(nconf.get('database:collection'));
+    var coursesCollection = db.collection('courses');
 
     // Setup Express server
     app.use(express.bodyParser());
@@ -57,6 +58,22 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
             callback(err, docs);
         });
     };
+
+    app.get('/api/subjects', function(req, res) {
+      coursesCollection.aggregate([
+        {'$group':{_id:"$Subj_code"}},
+        {'$sort': { '_id': 1}}
+        ], function(err, results) {
+          console.log(err, results);
+          if (!err) {
+            res.json(results);
+          } else {
+            res.json({
+              'error': error.message
+            });
+          }
+        });
+    });
 
     // Create Calendar
     app.post('/api/calendar', function(req, res) {
