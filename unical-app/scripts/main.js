@@ -9,6 +9,7 @@ $(document).ready(function() {
     var $subjectCode = $('#subject-code');
     var $courseNumb = $('#course-numb');
     var $submitBtn = $('.submit-btn');
+    var $loginBtn = $('.login-btn');
 
     // Templates
     var coursesSource   = $("#courses-template").html();
