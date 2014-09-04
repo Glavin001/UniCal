@@ -60,7 +60,7 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
 
     // Create Calendar
     app.post('/api/calendar', function(req, res) {
-        console.log(req.body);
+        // console.log(req.body);
 
         var courses = JSON.parse(req.body.courses);
 
@@ -70,13 +70,13 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
             // Create secure CalendarId
             var timestamp = (+(new Date()))+"";
             var temp = (timestamp + nconf.get('secret'));
-            console.log(temp);
+            // console.log(temp);
             var digest = "hex"
             var calendarId = crypto.createHash('md5').update(temp).digest(digest);
-            console.log(calendarId);
+            // console.log(calendarId);
 
             saveCalendar(calendarId, courses, collection, function(err, docs) {
-                console.log('Saved Courses');
+                // console.log('Saved Courses');
 
                 var url = "/calendar/"+calendarId+"/calendar.ics";
                 res.json({
@@ -102,18 +102,6 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
         });
 
     });
-
-    // var timeFromStr = function(str) {
-    //     // Ex: "1245"
-    //     //console.log('timeFromStr: ', str);
-    //     var n = parseInt(str);
-    //     var hours = parseInt(n/100);
-    //     var minutes = n - hours*100;
-    //     return {
-    //         "hours": hours,
-    //         "minutes": minutes
-    //     };
-    // };
 
     var jsonToEvent = function(json) {
         //console.log('jsonToEvent: ', json);
@@ -188,7 +176,7 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
             var baseurl = nconf.get('uniapi:protocol')+"://"+nconf.get('uniapi:hostname')+":"+nconf.get('uniapi:port');
             var url = baseurl + "/api/v1/courses/"+course._id;
             request(url, function(error, response, body) {
-                console.log(error, body);
+                // console.log(error, body);
                 try {
                     if (!error && !!body) {
                         var temp = JSON.parse(body);
@@ -206,12 +194,12 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
 
     // Calendar
     app.get('/calendar/:calendarId/calendar.ics', function(req, res) {
-        console.log('Calendar', req.params);
+        // console.log('Calendar', req.params);
         var calendarId = req.params.calendarId;
 
         // Locate all the entries using find
         collection.find({'calendarId': calendarId }).toArray(function(err, results) {
-            console.dir(results);
+            // console.dir(results);
             var result = results[0] || { 'courses': [] };
             var courses = result.courses;
 
