@@ -121,8 +121,7 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
         var summary = json.Subj_code + " " + json.Crse_numb + " - " + json.Crse_title;
         vevent.setSummary(summary);
 
-        var location = json.Bldg_code + " " + json.Room_code;
-        vevent.setDescription(location);
+        vevent.setDescription(json.faculty);
         // Calculate date and event length
         var startDate = new Date(json.Start_date);
         var startTime = json.Begin_time;
@@ -158,7 +157,8 @@ MongoClient.connect('mongodb://'+nconf.get('database:hostname')+':'+nconf.get('d
         }
         // console.log(days);
         vevent.addProperty('RRULE', { FREQ: 'WEEKLY', BYDAY: days.join(','), UNTIL: new Date(json.End_date) });
-        vevent.addProperty('LOCATION', json.Bldg_code +" "+json.Room_code);
+        var location = json.Bldg_code + " " + json.Room_code;
+        vevent.addProperty('LOCATION', location);
         return vevent;
     };
 
