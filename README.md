@@ -29,7 +29,7 @@ bower install
 ### Run UniAPI Server
 
 ```bash
-node api-server/
+node uniapi-server/
 ```
 
 ### Run UniCal Server
