@@ -4,6 +4,7 @@
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
+var icalendar = require('icalendar');
 
 module.exports = {
 
@@ -102,6 +103,61 @@ module.exports = {
         Sat_day: {
             type: "string",
             comment: ""
+        },
+
+
+        // Attribute methods
+        toEvent: function() {
+            var self = this;
+            //console.log('jsonToEvent: ', json);
+            var vevent = new icalendar.VEvent("event-" + self.crn);
+            var summary = self.Subj_code + " " + self.Crse_numb + " - " +
+            self.Crse_title;
+            vevent.setSummary(summary);
+
+            vevent.setDescription(self.Faculty);
+            // Calculate date and event length
+            var startDate = new Date(self.Start_date);
+            var startTime = self.Begin_time;
+            startDate.setHours(startTime.hours, startTime.minutes);
+
+            var endTime = self.End_time;
+            var endDate = new Date(self.Start_date);
+            endDate.setHours(endTime.hours, endTime.minutes);
+            // console.log(startDate, endDate);
+            vevent.setDate(startDate, endDate);
+
+            var days = [];
+            if (self.Mon_day) {
+                days.push("MO");
+            }
+            if (self.Tue_day) {
+                days.push("TU");
+            }
+            if (self.Wed_day) {
+                days.push("WE");
+            }
+            if (self.Thu_day) {
+                days.push("TH");
+            }
+            if (self.Fri_day) {
+                days.push("FR");
+            }
+            if (self.Sat_day) {
+                days.push("SA");
+            }
+            if (self.Sun_day) {
+                days.push("SU");
+            }
+            // console.log(days);
+            vevent.addProperty('RRULE', {
+                FREQ: 'WEEKLY',
+                BYDAY: days.join(','),
+                UNTIL: new Date(self.End_date)
+            });
+            var location = self.Bldg_code + " " + self.Room_code;
+            vevent.addProperty('LOCATION', location);
+            return vevent;
         }
 
     }

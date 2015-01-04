@@ -9,5 +9,38 @@ module.exports = {
 
   attributes: {
 
+      firstName: {
+          type: 'string',
+      },
+
+      lastName: {
+          type: 'string'
+      },
+
+      username: {
+          type: 'string',
+          unique: true,
+          required: true
+      },
+
+      password: {
+          type: 'string'
+      },
+
+      /**
+      Main Calendar, automatically updated and synced with Self-Service Banner
+      */
+      mainCalendar: {
+          model: 'calendars'
+      },
+
+      /**
+      All Calendars associated with this user.
+      */
+      calendars: {
+          collection: 'calendars',
+          via: "owner"
+      }
+
   }
 };

@@ -7,4 +7,9 @@
 
 module.exports = {
 
+    // find: ['sessionAuth'],
+    // findOne: ['sessionAuth'],
+    // update: ['sessionAuth'],
+    // destroy: ['sessionAuth']
+
 };

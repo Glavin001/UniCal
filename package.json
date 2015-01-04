@@ -1,12 +1,8 @@
 {
-  "name": "UniCal",
-  "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application",
-  "keywords": [],
   "dependencies": {
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
+    "grunt-bower-task": "^0.4.0",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-coffee": "~0.10.1",
     "grunt-contrib-concat": "~0.3.0",
@@ -18,12 +14,19 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-sails-linker": "~0.9.5",
     "grunt-sync": "~0.0.4",
+    "icalendar": "^0.7.1",
     "include-all": "~0.1.3",
     "rc": "~0.5.0",
     "sails": "~0.10.5",
     "sails-disk": "~0.10.0",
-    "sails-mongo": "^0.10.4"
+    "sails-mongo": "git+https://github.com/balderdashy/sails-mongo.git#ca098e1ae6316c01895373e2c583dcc310caad9e",
+    "self-service-banner": "^0.2.1"
   },
+  "name": "UniCal",
+  "private": true,
+  "version": "0.0.0",
+  "description": "a Sails application",
+  "keywords": [],
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js"

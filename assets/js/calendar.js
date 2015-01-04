@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-    console.log('Hello world');
-
     // Elements
     var $searchCoursesBtn = $('.search-courses-btn');
     var $coursesOutput = $('#courses-output');
@@ -11,34 +9,31 @@ $(document).ready(function() {
     var $submitBtn = $('.submit-btn');
 
     // Templates
-    var coursesSource   = $("#courses-template").html();
+    var coursesSource = $("#courses-template").html();
     var coursesTemplate = Handlebars.compile(coursesSource);
-    var selectedCoursesSource   = $("#selected-courses-template").html();
-    var selectedCoursesTemplate = Handlebars.compile(selectedCoursesSource);
+    var selectedCoursesSource = $("#selected-courses-template").html();
+    var selectedCoursesTemplate = Handlebars.compile(
+        selectedCoursesSource);
 
     // Courses
     var selectedCourses = [];
 
-    // Helpers
-    var getUniApi = function(callback) {
-        $.get("/api/uniapi").done(function(data) {
-            return callback && callback(data);
-        });
-    };
-
     var displaySelectedCourses = function() {
         // Refresh selected courses
-        var context = { "courses": selectedCourses };
+        var context = {
+            "courses": selectedCourses
+        };
         var html = selectedCoursesTemplate(context);
         $selectedCoursesOutput.html(html);
 
         // Bind click events to remove courses
-        $('.remove-course-btn', $selectedCoursesOutput).click(function() {
-            var $el = $(event.target);
-            console.log($el);
-            var cData = JSON.parse($el.attr('data-course'));
-            removeCourse(cData);
-        });
+        $('.remove-course-btn', $selectedCoursesOutput).click(
+            function() {
+                var $el = $(event.target);
+                console.log($el);
+                var cData = JSON.parse($el.attr('data-course'));
+                removeCourse(cData);
+            });
 
     };
 
@@ -67,7 +62,9 @@ $(document).ready(function() {
     };
 
     var displayCourses = function(courses) {
-        var context = {"courses": courses};
+        var context = {
+            "courses": courses
+        };
         var html = coursesTemplate(context);
         $coursesOutput.html(html);
 
@@ -85,79 +82,104 @@ $(document).ready(function() {
     displaySelectedCourses([]);
 
     // Main
-    getUniApi(function(uniApi) {
+    var baseApiUrl = "/api/v1/";
 
-        console.log(uniApi);
-        var baseApiUrl = uniApi.protocol + "://" + uniApi.hostname + ":" +uniApi.port + "/api/v1/";
+    var findCourses = function(query, callback) {
+        var data = [];
 
-        var findCourses = function(query, callback) {
-            var data = "conditions="+JSON.stringify(query.conditions)+"&options="+JSON.stringify(query.options);
-            $.get(baseApiUrl + "courses", data)
+        _.each(_.keys(query), function(key) {
+            data.push(key + "=" + JSON.stringify(query[key]));
+            // "where="+JSON.stringify(query.conditions)+"&options="+JSON.stringify(query.options);
+        });
+        var dataStr = data.join('&');
+
+        $.get(baseApiUrl + "courses", dataStr)
             .done(function(data) {
                 console.log(data);
                 return callback && callback(data);
             });
-        };
+    };
 
-        var searchCourses = function() {
-            var conditions = {
-                "Subj_code": $subjectCode.val(),
-                "Crse_numb": $courseNumb.val()
-            };
-            var limit = 10;
-            var options = {
-                limit: limit
-            };
-            findCourses({"conditions": conditions, "options": options }, function(courses) {
-                console.log(courses);
-                displayCourses(courses);
-            });
-        };
-
-        var submitCourses = function(callback) {
-            $.post("/api/calendar", {"courses": JSON.stringify(selectedCourses) }).done(function(data) {
-                return callback && callback(data);
-            });
-        };
-
-        var getStats = function(callback) {
-            $.get('/api/stats.json').done(function(stats) {
-                return callback && callback(stats);
-            });
-        };
-
-        // Display stats
-        function displayStats() {
-            getStats(function(stats) {
-                $('.calendars-created-count').text(stats.calendars);
-            });
-        }
-        setInterval(displayStats, 5*1000); // Update Stats every 5 seconds
-        displayStats(); // Init
-
-        $submitBtn.click(function() {
-            $('a#calendarURL').text("Please wait...");
-            submitCourses(function(data) {
-                if (data && data.url) {
-                    var calendarURL = window.location.origin + data.url;
-
-                    console.log(calendarURL);
-                    console.log(data);
-
-                    // Display data
-                    $('a#calendarURL').text(calendarURL).attr('href', calendarURL);
-                } else {
-                    $('a#calendarURL').text("Please submit above and wait.");
-                }
-            });
+    var searchCourses = function() {
+        var conditions = {};
+        var subjCode = $subjectCode.val();
+        var crseNumb = $courseNumb.val();
+        console.log(subjCode, crseNumb);
+        if (subjCode)
+            conditions.Subj_code = subjCode;
+        if (crseNumb)
+            conditions.Crse_numb = crseNumb;
+        // var limit = 10;
+        findCourses({
+            "where": conditions,
+            // "limit": limit
+        }, function(courses) {
+            console.log(courses);
+            displayCourses(courses);
         });
+    };
 
-        // Add click handler
-        $searchCoursesBtn.click(searchCourses);
-        // Trigger virtual click
-        $searchCoursesBtn.click();
+    var submitCourses = function(callback) {
+        $.post("/api/calendar", {
+            "courses": JSON.stringify(selectedCourses)
+        }).done(function(data) {
+            return callback && callback(data);
+        });
+    };
 
+    // Display stats
+    var getCalendarCount = function(callback) {
+        $.get('/api/v1/calendars/count').done(function(stats) {
+            return callback && callback(stats);
+        });
+    };
+    function displayCalendarCount() {
+        getCalendarCount(function(stats) {
+            $('.calendars-created-count').text(stats.value);
+        });
+    }
+    var getCourseCount = function(callback) {
+        $.get('/api/v1/courses/count').done(function(stats) {
+            return callback && callback(stats);
+        });
+    };
+    function displayCoursesCount() {
+        getCourseCount(function(stats) {
+            $('.courses-count').text(stats.value);
+        });
+    }
 
+    function displayStats() {
+        displayCalendarCount();
+        displayCoursesCount();
+    }
+    setInterval(displayStats, 5 * 1000); // Update Stats every 5 seconds
+    displayStats(); // Init
+
+    $submitBtn.click(function() {
+        $('a#calendarURL').text("Please wait...");
+        submitCourses(function(data) {
+            if (data && data.url) {
+                var calendarURL = window.location.origin +
+                    data.url;
+
+                console.log(calendarURL);
+                console.log(data);
+
+                // Display data
+                $('a#calendarURL').text(calendarURL).attr(
+                    'href', calendarURL);
+            } else {
+                $('a#calendarURL').text(
+                    "Please submit above and wait."
+                );
+            }
+        });
     });
+
+    // Add click handler
+    $searchCoursesBtn.click(searchCourses);
+    // Trigger virtual click
+    $searchCoursesBtn.click();
 
 });
