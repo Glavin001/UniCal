@@ -367,6 +367,26 @@ module.exports = {
             }
 
         }
+    },
+
+    subjects: function(req, res) {
+        sails.models.courses.native(function(err, collection) {
+
+            collection.aggregate({
+                "$group": {
+                    "_id": "subjects",
+                    "total": {
+                        "$addToSet": "$Subj_code"
+                    }
+                }
+            }, function(err, results) {
+
+                return res.json(results[0].total);
+
+            });
+
+        });
     }
+
 
 };
