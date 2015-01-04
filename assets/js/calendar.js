@@ -21,9 +21,9 @@ $(document).ready(function() {
 
     // Helpers
     var getUniApi = function(callback) {
-      $.get("/api/uniapi").done(function(data) {
-        return callback && callback(data);
-      });
+        $.get("/api/uniapi").done(function(data) {
+            return callback && callback(data);
+        });
     };
 
     var displaySelectedCourses = function() {
@@ -91,22 +91,22 @@ $(document).ready(function() {
         var baseApiUrl = uniApi.protocol + "://" + uniApi.hostname + ":" +uniApi.port + "/api/v1/";
 
         var findCourses = function(query, callback) {
-          var data = "conditions="+JSON.stringify(query.conditions)+"&options="+JSON.stringify(query.options);
-          $.get(baseApiUrl + "courses", data)
-          .done(function(data) {
-            console.log(data);
-            return callback && callback(data);
-          });
+            var data = "conditions="+JSON.stringify(query.conditions)+"&options="+JSON.stringify(query.options);
+            $.get(baseApiUrl + "courses", data)
+            .done(function(data) {
+                console.log(data);
+                return callback && callback(data);
+            });
         };
 
         var searchCourses = function() {
             var conditions = {
                 "Subj_code": $subjectCode.val(),
                 "Crse_numb": $courseNumb.val()
-              };
+            };
             var limit = 10;
             var options = {
-              limit: limit
+                limit: limit
             };
             findCourses({"conditions": conditions, "options": options }, function(courses) {
                 console.log(courses);
@@ -121,20 +121,20 @@ $(document).ready(function() {
         };
 
         var getStats = function(callback) {
-          $.get('/api/stats.json').done(function(stats) {
-            return callback && callback(stats);
-          });
+            $.get('/api/stats.json').done(function(stats) {
+                return callback && callback(stats);
+            });
         };
 
         // Display stats
         function displayStats() {
-          getStats(function(stats) {
-            $('.calendars-created-count').text(stats.calendars);
-          });
+            getStats(function(stats) {
+                $('.calendars-created-count').text(stats.calendars);
+            });
         }
         setInterval(displayStats, 5*1000); // Update Stats every 5 seconds
         displayStats(); // Init
-        
+
         $submitBtn.click(function() {
             $('a#calendarURL').text("Please wait...");
             submitCourses(function(data) {
