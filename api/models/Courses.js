@@ -112,7 +112,7 @@ module.exports = {
             //console.log('jsonToEvent: ', json);
             var vevent = new icalendar.VEvent("event-" + self.crn);
             var summary = self.Subj_code + " " + self.Crse_numb + " - " +
-            self.Crse_title;
+                self.Crse_title;
             vevent.setSummary(summary);
 
             vevent.setDescription(self.Faculty);
@@ -160,5 +160,30 @@ module.exports = {
             return vevent;
         }
 
+    },
+
+    toiCal: function(courses, callback) {
+
+        // sails.log.debug(courses);
+        // Generate iCalendar file
+        var calendar = new icalendar.iCalendar();
+        // Replace PRODID
+        calendar.properties.PRODID = [];
+        calendar.addProperty('PRODID',
+            "-//Saint Mary's University//Calendar//EN"
+        );
+        // Add events to calendar
+        for (var i = 0, len = courses.length; i <
+            len; i++) {
+            var course = courses[i];
+            if (course.Begin_time && course.End_time) {
+                var vevent = course.toEvent();
+                calendar.addComponent(vevent);
+            }
+        }
+
+        return callback(null, calendar);
+
     }
+
 };

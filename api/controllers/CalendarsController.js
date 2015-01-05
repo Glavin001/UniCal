@@ -7,6 +7,14 @@
 
 module.exports = {
 
+    "count": function(req, res) {
+        Calendars.count(function(err, result) {
+            return res.json({
+                "value": result
+            });
+        });
+    },
+
     ":userid/:calendarid/calendar.ics": function(req, res) {
         var params = req.allParams();
         var userId = params.userid;
@@ -24,9 +32,9 @@ module.exports = {
                 owner: ownerId
             }
         };
-        sails.log.info(query);
+        sails.log.debug(query);
         Calendars.findOne(query, function(err, calendar) {
-            sails.log.info(err, calendar);
+            sails.log.debug(err, calendar);
             if (err) {
                 return res.serverError(err);
             }
@@ -34,43 +42,30 @@ module.exports = {
                 return res.notFound();
             }
             Calendars.toiCal(calendar, function(err, ical) {
-                sails.log.info(err, ical);
+                // sails.log.info(err, ical);
                 return res.send(ical.toString());
             });
         });
     },
 
-    "count": function(req, res) {
-        Calendars.count(function(err, result) {
-            return res.json({
-                "value": result
+    "courses/calendar.ics": function(req, res) {
+        var params = req.allParams();
+        sails.log.debug(params);
+        var query = {};
+        if (params.where) {
+            query.where = JSON.parse(params.where);
+        }
+        sails.log.debug(query);
+        var Courses = sails.models.courses;
+        Courses.find(query, function(err, courses) {
+            if (err) {
+                return res.serverError(err);
+            }
+            Courses.toiCal(courses, function(err, ical) {
+                // sails.log.info(err, ical);
+                return res.send(ical.toString());
             });
         });
-
-        // // Get Users
-        // sails.models.users.native(function(err, collection) {
-        //     if (err) {
-        //         sails.log.error(err);
-        //         return res.serverError(err.message);
-        //     }
-        //
-        //     // Query User's calendars
-        //     collection.aggregate([{
-        //         "$unwind": "$calendars"
-        //     }, {
-        //         "$group": {
-        //             _id: "count",
-        //             "total": {
-        //                 "$sum": 1
-        //             }
-        //         }
-        //     }], function(err, result) {
-        //         var count = result[0].total;
-        //         return res.json({
-        //             'value': count
-        //         });
-        //     });
-        // });
     }
 
 };
