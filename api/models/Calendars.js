@@ -26,7 +26,17 @@ module.exports = {
 
         isAnonymous: function() {
             return !this.owner;
+        },
+
+        getUrl: function() {
+            var ownerId = this.owner;
+            if (ownerId === null) {
+                ownderId = 0;
+            }
+            var calendarId = this.id;
+            return userId+"/"+calendarId+"/calendar.ics";
         }
+
 
     },
 
